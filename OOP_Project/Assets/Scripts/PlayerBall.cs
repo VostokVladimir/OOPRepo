@@ -2,65 +2,68 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace FirstModule
+namespace OOP
 {
     
     public class PlayerBall : MonoBehaviour
-    {   public float speed = 3.0f;
+    {   public float speed;
+        [SerializeField]public float helth;
+        public float bonus;
+        //private Vector3 _size;
         private Rigidbody _rigidbody;
+        //public float timer;
+        
+
+        private void Awake()
+        {
+            speed = 3.0f;
+            //timer = 3.0f;
+        }
 
         // Start is called before the first frame update
         void Start()
         {
 
             _rigidbody = GetComponent<Rigidbody>();
+           
 
 
         }
 
-        protected void Move()
+       
+
+        protected void Move(float speed)
         {
+            
             float moveHorizontal = Input.GetAxis("Horizontal");
             float moveVertical = Input.GetAxis("Vertical");
             Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
             _rigidbody.AddForce(movement * speed);
-
-
-            //ДЗ альтернативное управление через кнопки стрелок
-            //if (Input.GetKey(KeyCode.UpArrow))
-            //{
-            //    Vector3 direction = new Vector3(0.0f, 0.0f, 1.0f);
-            //    _rigidbody.AddForce(direction * speed);
-            //}
-            //if (Input.GetKey(KeyCode.DownArrow))
-            //{
-            //    Vector3 direction = new Vector3(0.0f, 0.0f, -1.0f);
-            //    _rigidbody.AddForce(direction * speed);
-
-            //}
-
-            //if (Input.GetKey(KeyCode.LeftArrow))
-            //{
-            //    Vector3 direction = new Vector3(-1.0f, 0.0f, 0.0f);
-            //    _rigidbody.AddForce(direction * speed);
-            //}
-            //if (Input.GetKey(KeyCode.RightArrow))
-            //{
-            //    Vector3 direction = new Vector3(1.0f, 0.0f, 0.0f);
-            //    _rigidbody.AddForce(direction * speed);
-
-            //}
-
-
-
-
-
-
-
-
+                             
 
         }
 
+
+        //public void SizeChanging()
+        //{   _size = new Vector3(0.4f, 0.4f, 0.4f);
+        //    transform.localScale = _size;
+        //    timer = timer - 1.0f * Time.deltaTime;
+        //    if (timer <= 0) { transform.localScale = new Vector3(0.27f, 0.27f, 0.27f); }
+
+
+        //}
+
+        
+
+
+        // Update is called once per frame
+        void FixedUpdate()
+        {
+            
+            Move(speed);
+            
+            
+        }
 
     }
 }
