@@ -7,45 +7,61 @@ namespace OOP
     public sealed class GoobBonus : InteractiveObject,IFlay, IFliker
         
     {
-        //private int _points;
+        private GameObject _player;
         private Material _material;
         private float _lenthFlay;
         private DisplayBonuses _displayBonuses;
-        
+        private bool _flag;
+        private float _currentSpeed;
 
         private void Awake()
         {
             _material = GetComponent<Renderer>().material;
             _lenthFlay = Random.Range(0.5f, 1.0f);
             _displayBonuses = new DisplayBonuses();
-            //_points = 5;
-
-            
-
+            _flag = false;
         }
+        
 
         private void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                var player = other.gameObject.GetComponent<PlayerBall>();
-
-                player.speed = 30.0f;
-
-
+                var player = other.gameObject.GetComponent<PlayerMovements>();
+                player.speed = 15.0f;
+                print("Увеличение скорости 10");
+                PlayerBall.flage = true;                       
                 Interaction();
+                 
             }
         }
 
 
+        void Update()
+        {
+            //if (_flag == true)//не принимает новое значение true из метода OnTriggerEnter
+            //{
+            //    StartCoroutine(SpeedChange());
+                
+            //}
+
+        }
+
+        private IEnumerator SpeedChange()
+        {   
+            yield return new WaitForSeconds(5.0f);
+            print("5 сек прошло");
+                       
+            
+            
+        }
+
         protected override void Interaction()
         {
-           // _displayBonuses.Display(5);
-            Destroy(gameObject);
-            Debug.Log("Гудбонус сработал");
+           // Add bonus
+           PlayerBall.bonus+=5;
+           Destroy(gameObject);
             
-
-            // Add bonus
         }
 
         

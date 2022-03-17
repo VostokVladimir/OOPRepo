@@ -25,10 +25,12 @@ namespace OOP
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                var player = other.gameObject.GetComponent<PlayerBall>();
-
+                var player = other.gameObject.GetComponent<PlayerMovements>();
+                player.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+                Debug.Log("ГудбонусРазмер сработал");
+                PlayerBall.flage_size = true;
                 Interaction();
-                SizeChanging();
+               
 
             }
         }
@@ -37,23 +39,14 @@ namespace OOP
         protected override void Interaction()
         {
             // _displayBonuses.Display(5);
+            PlayerBall.bonus += 5;
             Destroy(gameObject);
-            Debug.Log("Гудбонус сработал");
-
-
+                       
             // Add bonus
         }
 
 
-        public void SizeChanging()
-        {
-            _size = new Vector3(0.4f, 0.4f, 0.4f);
-            transform.localScale = _size;
-            timer = timer - 1.0f * Time.deltaTime;
-            if (timer <= 0) { transform.localScale = new Vector3(0.27f, 0.27f, 0.27f); }
-
-
-        }
+        
 
         public void Flay()
         {

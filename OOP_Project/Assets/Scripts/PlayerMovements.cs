@@ -8,11 +8,11 @@ namespace OOP
     {
 
 
-        //// Update is called once per frame
-        //void FixedUpdate()
-        //{
-        //    Move(speed);
-        //}
+        //Update is called once per frame
+        void FixedUpdate()
+        {
+            Move(speed);
+        }
     }
 }
 
