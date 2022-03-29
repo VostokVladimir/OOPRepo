@@ -13,42 +13,69 @@ namespace OOP
         public static float bonus;
         public static Vector3 _size;
         public static bool flage;
+        public  bool flageIsContact;
         public static bool flage_size;
         private  Rigidbody _rigidbody;
         public Text bonusScoreText;
+        public AudioSource badBonusSound;
+        
         private string poem;
 
-        public float Speed
-        {
-            get { return speed; }
-
-            set { speed = value; }
-
-        }
+        
         private void Awake()
 
         {
             bonus = 0;
             speed = 3.0f;
+            flageIsContact = false;
+            badBonusSound = GetComponent<AudioSource>();
 
+            
         }
 
         // Start is called before the first frame update
         void Start()
         {
             _rigidbody = GetComponent<Rigidbody>();
-            
+            BadBonus badBonus = new BadBonus();
+            badBonus.Event += BadBonus_Event;
+             
 
+        }
+
+        private void BadBonus_Event()
+        {
+            
+            badBonusSound.Play();
+
+
+        }
+
+        public void DisplayException()
+        {
+            //throw new OutRangeException("Вы ввели не тот ");
         }
 
         protected void Move(float speed)
         {
+            try
+            {
+                float moveHorizontal = Input.GetAxis("Horizontal");
+                float moveVertical = Input.GetAxis("Vertical");
+                Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+               if (speed < 0) 
+                { throw new MyException(); }
+               else
+                _rigidbody.AddForce(movement * speed);
+            }
+            catch (MyException ex)
+            {
+                Debug.Log("Параметр скорости не может быть отрицательным числом");
+                Debug.Log (ex.Message);
+            }
+            
 
-            float moveHorizontal = Input.GetAxis("Horizontal");
-            float moveVertical = Input.GetAxis("Vertical");
-            Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-            _rigidbody.AddForce(movement * speed);
-
+            
 
         }
                
@@ -56,13 +83,23 @@ namespace OOP
         {
             bonusScoreText.text = bonus.ToString();
             if (flage)
-            { Invoke("Change", 5.0f); }
+            { Invoke("Change", 5.0f);
+                       
+            }
 
             if (flage_size)
             { StartCoroutine(SizeChange()); }
 
             if (!flage_size)
             { StopCoroutine(SizeChange()); }
+
+            if (flageIsContact) 
+            {
+                BadBonus_Event();
+                flageIsContact = false;
+            }
+
+
         }
 
 

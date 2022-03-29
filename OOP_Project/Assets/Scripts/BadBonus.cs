@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+ 
 
 
 namespace OOP
@@ -9,6 +10,9 @@ namespace OOP
     {
         private float _lengthFlay;
         private float _speedRotation;
+        public delegate void BadBonusDelegate();
+        public bool _isContact;
+        public event BadBonusDelegate Event;
 
         private void Awake()
         {
@@ -23,18 +27,52 @@ namespace OOP
             if (other.gameObject.CompareTag("Player"))
             {
                 var player = other.gameObject.GetComponent<PlayerMovements>();
+                var _skriptPlayerBall = other.gameObject.GetComponent<PlayerBall>();
                 player.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 Debug.Log("Уменьшение");
-
+                _skriptPlayerBall.flageIsContact = true;
+               
                 Interaction();
 
 
             }
         }
+
+
+        public void IsContact()
+        {
+            if (_isContact) {   Event?.Invoke();}
+
+        }
+
+
+
         protected override void Interaction()
         {
             Destroy(gameObject);
-            PlayerBall.bonus -= 5;
+            if (PlayerBall.bonus <= 0)
+                throw new System.ArgumentException ("Бонус не может быть ниже нуля");
+            try
+            {
+                PlayerBall.bonus -= 5;
+            }
+            catch (System.ArgumentException ex)
+            {
+                print(ex.Message);             
+                
+            }
+            finally 
+            {
+                PlayerBall.bonus = 0;
+            }
+
+
+
+
+
+
+
+
         }
 
         public void Flay() 
