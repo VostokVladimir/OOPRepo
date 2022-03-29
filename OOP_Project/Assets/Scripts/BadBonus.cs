@@ -39,11 +39,11 @@ namespace OOP
         }
 
 
-        public void IsContact()
-        {
-            if (_isContact) {   Event?.Invoke();}
+        //public void IsContact()
+        //{
+        //    if (_isContact) {   Event?.Invoke();}
 
-        }
+        //}
 
 
 
