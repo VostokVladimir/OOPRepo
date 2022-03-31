@@ -1,66 +1,130 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace FirstModule
+namespace OOP
 {
-    
+
     public class PlayerBall : MonoBehaviour
-    {   public float speed = 3.0f;
-        private Rigidbody _rigidbody;
+    {
+        public float speed;
+        [SerializeField] public float helth;
+        public static float bonus;
+        public static Vector3 _size;
+        public static bool flage;
+        public  bool flageIsContact;
+        public static bool flage_size;
+        private  Rigidbody _rigidbody;
+        public Text bonusScoreText;
+        public AudioSource badBonusSound;
+        
+        private string poem;
+
+        
+        private void Awake()
+
+        {
+            bonus = 0;
+            speed = 3.0f;
+            flageIsContact = false;
+            badBonusSound = GetComponent<AudioSource>();
+
+            
+        }
 
         // Start is called before the first frame update
         void Start()
         {
-
             _rigidbody = GetComponent<Rigidbody>();
+            BadBonus badBonus = new BadBonus();
+            badBonus.Event += BadBonus_Event;
+             
+
+        }
+
+        private void BadBonus_Event()
+        {
+            
+            badBonusSound.Play();
 
 
         }
 
-        protected void Move()
+        public void DisplayException()
         {
-           // float moveHorizontal = Input.GetAxis("Horizontal");
-           // float moveVertical = Input.GetAxis("Vertical");
-           // Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-           // _rigidbody.AddForce(movement * speed);
+            //throw new OutRangeException("Вы ввели не тот ");
+        }
+
+        protected void Move(float speed)
+        {
+            try
+            {
+                float moveHorizontal = Input.GetAxis("Horizontal");
+                float moveVertical = Input.GetAxis("Vertical");
+                Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+               if (speed < 0) 
+                { throw new MyException(); }
+               else
+                _rigidbody.AddForce(movement * speed);
+            }
+            catch (MyException ex)
+            {
+                Debug.Log("Параметр скорости не может быть отрицательным числом");
+                Debug.Log (ex.Message);
+            }
+            
 
             
 
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                Vector3 direction = new Vector3(0.0f, 0.0f, 1.0f);
-                _rigidbody.AddForce(direction * speed);
-            }
-            if (Input.GetKey(KeyCode.DownArrow))
-            {
-                Vector3 direction = new Vector3(0.0f, 0.0f, -1.0f);
-                _rigidbody.AddForce(direction * speed);
-
+        }
+               
+        void Update()
+        {
+            bonusScoreText.text = bonus.ToString();
+            if (flage)
+            { Invoke("Change", 5.0f);
+                       
             }
 
-            if (Input.GetKey(KeyCode.LeftArrow))
+            if (flage_size)
+            { StartCoroutine(SizeChange()); }
+
+            if (!flage_size)
+            { StopCoroutine(SizeChange()); }
+
+            if (flageIsContact) 
             {
-                Vector3 direction = new Vector3(-1.0f, 0.0f, 0.0f);
-                _rigidbody.AddForce(direction * speed);
+                BadBonus_Event();
+                flageIsContact = false;
             }
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                Vector3 direction = new Vector3(1.0f, 0.0f, 0.0f);
-                _rigidbody.AddForce(direction * speed);
-
-            }
-
-           // Vector3 direction = new Vector3(0.0f, 0.0f, 0.0f);
-
-
-
-
-
 
 
         }
 
 
+        public void Change()
+        {
+            print("Уменьшение скорости 3 ");
+            speed = 3.0f;
+
+        }
+
+
+        private IEnumerator SizeChange()
+        {
+            yield return new WaitForSeconds(5.0f);
+            transform.localScale= new Vector3(0.27f, 0.27f, 0.27f);
+            print("5 сек прошло");
+            flage_size = false;
+            
+
+        }
+
+        
+
+
+
     }
+    
 }

@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace FirstModule
+namespace OOP
 {
     public sealed partial class PlayerMovements : PlayerBall
     {
-        
 
-        // Update is called once per frame
+
+        //Update is called once per frame
         void FixedUpdate()
         {
-            Move();
+            Move(speed);
         }
     }
 }
+
