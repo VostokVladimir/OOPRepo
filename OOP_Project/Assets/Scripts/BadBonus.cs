@@ -6,11 +6,13 @@ using UnityEngine;
 
 namespace OOP
 {
-    public class BadBonus : InteractiveObject,IRotation,IFlay //ICloneable
+    public class BadBonus : InteractiveObject,IRotation,IFlay,IDamagable //ICloneable
     {
         private float _lengthFlay;
         private float _speedRotation;
         public delegate void BadBonusDelegate();
+        private float _maxhealth=4;
+        private float _currentHealth;
         public bool _isContact;
         public event BadBonusDelegate Event;
 
@@ -18,6 +20,7 @@ namespace OOP
         {
             _lengthFlay = Random.Range(1.0f, 2.0f);
             _speedRotation = Random.Range(5.0f, 40.0f);
+            _currentHealth = _maxhealth;
 
         }
 
@@ -45,25 +48,29 @@ namespace OOP
 
         //}
 
+        
 
 
         protected override void Interaction()
         {
             Destroy(gameObject);
             if (PlayerBall.bonus <= 0)
-                throw new System.ArgumentException ("Бонус не может быть ниже нуля");
-            try
             {
-                PlayerBall.bonus -= 5;
-            }
-            catch (System.ArgumentException ex)
-            {
-                print(ex.Message);             
-                
-            }
-            finally 
-            {
-                PlayerBall.bonus = 0;
+                //throw new System.Exception ("Бонус не может быть ниже нуля");
+                try
+                {
+                    PlayerBall.bonus -= 5;
+                }
+                catch (System.Exception ex)
+                {
+                    print(ex.Message);
+                    System.Console.WriteLine(ex.Message);
+
+                }
+                finally
+                {
+                    PlayerBall.bonus = 0;
+                }
             }
 
 
@@ -85,6 +92,21 @@ namespace OOP
         {
 
             transform.Rotate(Vector3.up * (Time.deltaTime * _speedRotation), Space.World);
+        }
+
+        /// <summary>
+        /// Метод уменьшает текущее здоровье обьекта на который производится воздействие
+        /// </summary>
+        /// <param name="damagevalue"></задать уровень урона при каждом воздействии на обьект класса >
+        public void ApplyDamage(int damagevalue)
+        {
+            _currentHealth -= damagevalue;
+            Debug.Log("У БедБонуса текущее здоровье" + _currentHealth + "  балов");
+            if(_currentHealth<=0)
+            {
+                Destroy(gameObject);
+                Debug.Log("Обьект уничтожен");
+            }
         }
 
         //public object Clone()

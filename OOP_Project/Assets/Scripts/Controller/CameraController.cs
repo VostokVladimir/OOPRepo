@@ -7,6 +7,7 @@ namespace OOP
     public sealed class CameraController : MonoBehaviour
     {
         public PlayerBall PlayerBall;
+        
         private Vector3 _offset;
 
         private void Start()
