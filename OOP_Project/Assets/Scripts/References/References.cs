@@ -54,8 +54,15 @@ namespace OOP
 
                 if (_playerBall == null)
                 {
-                    var Loadplayerball = Resources.Load<PlayerBall>("Player");//загружаем префаб в переменную
-                    _playerBall = Object.Instantiate(Loadplayerball);//размещаем префаб на сцене в
+                    var Loadplayerball = Resources.Load<PlayerBall>("Player");//загружаем префаб в переменную . Вопрос : КАк префаб может быть приведен к типу PlayerBall, если он имеет тип Game Object ?
+                    //_playerBall = Object.Instantiate(Loadplayerball);//размещаем префаб на сцене в
+                 
+                                 
+
+                    _playerBall = Object.Instantiate(Loadplayerball, new Vector3(4, 2, -4), Quaternion.identity);//почему не работает ???
+                        
+                       
+
                 }
 
                 return _playerBall;
