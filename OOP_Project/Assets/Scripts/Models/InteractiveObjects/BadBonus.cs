@@ -1,20 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
- 
+using static UnityEngine.Random;
+
 
 
 namespace OOP
 {
-    public class BadBonus : InteractiveObject,IRotation,IFlay,IDamagable //ICloneable
+    public sealed class BadBonus : InteractiveObjects, IRotation, IFlay, IDamagable
     {
         private float _lengthFlay;
         private float _speedRotation;
         public delegate void BadBonusDelegate();
-        private float _maxhealth=4;
+        private float _maxhealth = 4;
         private float _currentHealth;
         public bool _isContact;
         public event BadBonusDelegate Event;
+        //public event Action<string, Color> CatchPlayer;
+
+
+        public delegate void BadBonusDel(string s, Color c);
+        public event BadBonusDel CatchPlayer = delegate (string str, Color col) { };
 
         private void Awake()
         {
@@ -34,7 +40,7 @@ namespace OOP
                 player.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 Debug.Log("Уменьшение");
                 _skriptPlayerBall.flageIsContact = true;
-               
+
                 Interaction();
 
 
@@ -42,18 +48,14 @@ namespace OOP
         }
 
 
-        //public void IsContact()
-        //{
-        //    if (_isContact) {   Event?.Invoke();}
-
-        //}
-
         
-
-
-        protected override void Interaction()
+        public override void Interaction()
         {
+            CatchPlayer.Invoke(gameObject.name, _color);
+
             Destroy(gameObject);
+
+
             if (PlayerBall.bonus <= 0)
             {
                 //throw new System.Exception ("Бонус не может быть ниже нуля");
@@ -72,23 +74,28 @@ namespace OOP
                     PlayerBall.bonus = 0;
                 }
             }
-
-
-
-
-
-
-
-
         }
 
-        public void Flay() 
+
+        public override void Execute()
+        {
+            if (!IsInteractable)
+            {
+                return;
+            }
+
+            Flay();
+            Rotation();
+        }
+
+
+        public void Flay()
         {
             transform.localPosition = new Vector3(transform.localPosition.x, Mathf.PingPong(Time.time, _lengthFlay), transform.localPosition.z);
-                               
+
         }
 
-        public void Rotation ()
+        public void Rotation()
         {
 
             transform.Rotate(Vector3.up * (Time.deltaTime * _speedRotation), Space.World);
@@ -102,7 +109,7 @@ namespace OOP
         {
             _currentHealth -= damagevalue;
             Debug.Log("У БедБонуса текущее здоровье" + _currentHealth + "  балов");
-            if(_currentHealth<=0)
+            if (_currentHealth <= 0)
             {
                 Destroy(gameObject);
                 Debug.Log("Обьект уничтожен");
@@ -118,4 +125,5 @@ namespace OOP
         //}
 
     }
+
 }

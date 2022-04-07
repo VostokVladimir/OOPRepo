@@ -39,8 +39,8 @@ namespace OOP
             _rigidbody = GetComponent<Rigidbody>();
             BadBonus badBonus = new BadBonus();
             badBonus.Event += BadBonus_Event;
-            var resourceSphere=Resources.Load("Sphere");
-            var go = Instantiate(resourceSphere, new Vector3(1, 1, 1),Quaternion.identity) as GameObject;//пример загрузки ресурса из папки
+            //var resourceSphere=Resources.Load("Sphere");пример загрузки обьекта их папки
+           // var go = Instantiate(resourceSphere, new Vector3(1, 1, 1),Quaternion.identity) as GameObject;//пример загрузки ресурса из папки
                 
 
         }
