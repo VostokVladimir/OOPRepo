@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace OOP
 {
 
-    public class PlayerBall : MonoBehaviour
+    public class PlayerBall :  PlayerBase
     {
         public float speed;
         [SerializeField] public float helth;
@@ -38,9 +38,9 @@ namespace OOP
         {
             _rigidbody = GetComponent<Rigidbody>();
             BadBonus badBonus = new BadBonus();
-            badBonus.Event += BadBonus_Event;
+            
             //var resourceSphere=Resources.Load("Sphere");пример загрузки обьекта их папки
-           // var go = Instantiate(resourceSphere, new Vector3(1, 1, 1),Quaternion.identity) as GameObject;//пример загрузки ресурса из папки
+           // var go = Instantiate(resourceSphere, new Vector3(1, 1, 1),Quaternion.identity) as GameObject;//пример загрузки ресурса из папки//тут работает а в game controllers нет
                 
 
         }
@@ -58,23 +58,23 @@ namespace OOP
             //throw new OutRangeException("Вы ввели не тот ");
         }
 
-        protected void Move(float speed)
+        public override void Move(float x,float y,float z)
         {
-            try
-            {
-                float moveHorizontal = Input.GetAxis("Horizontal");
-                float moveVertical = Input.GetAxis("Vertical");
-                Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-               if (speed < 0) 
-                { throw new MyException(); }
-               else
-                _rigidbody.AddForce(movement * speed);
-            }
-            catch (MyException ex)
-            {
-                Debug.Log("Параметр скорости не может быть отрицательным числом");
-                Debug.Log (ex.Message);
-            }
+            //try
+            //{
+            //    float moveHorizontal = Input.GetAxis("Horizontal");
+            //    float moveVertical = Input.GetAxis("Vertical");
+            //    Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+            //   if (speed < 0) 
+            //    { throw new MyException(); }
+            //   else
+                _rigidbody.AddForce(new Vector3(x,y,z) * speed);
+            //}
+            //catch (MyException ex)
+            //{
+            //    Debug.Log("Параметр скорости не может быть отрицательным числом");
+            //    Debug.Log (ex.Message);
+            //}
             
 
             

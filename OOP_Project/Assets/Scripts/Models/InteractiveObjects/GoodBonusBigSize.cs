@@ -17,7 +17,7 @@ namespace OOP
         {
             _material = GetComponent<Renderer>().material;
             _lenthFlay = Random.Range(0.5f, 1.0f);
-            _displayBonuses = new DisplayBonuses();
+            //_displayBonuses = new DisplayBonuses();
 
         }
 
@@ -25,7 +25,7 @@ namespace OOP
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                var player = other.gameObject.GetComponent<PlayerMovements>();
+                var player = other.gameObject.GetComponent<Transform>();//была ссылка на скрипт Player Moovment,,...  надо бы поставить на плеер базе
                 player.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
                 Debug.Log("ГудбонусРазмер сработал");
                 PlayerBall.flage_size = true;

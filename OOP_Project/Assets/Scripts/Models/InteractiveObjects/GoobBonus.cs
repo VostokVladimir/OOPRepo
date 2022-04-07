@@ -6,7 +6,9 @@ namespace OOP
 {
     public sealed class GoobBonus : InteractiveObject,IFlay, IFliker
         
-    {
+    {   public int PointgoodBonus=5;
+        public delegate void DelegateGoodBonus(int a);
+        public event DelegateGoodBonus ContactPlayerGoodBonus;
         private GameObject _player;
         private Material _material;
         private float _lenthFlay;
@@ -18,7 +20,7 @@ namespace OOP
         {
             _material = GetComponent<Renderer>().material;
             _lenthFlay = Random.Range(0.5f, 1.0f);
-            _displayBonuses = new DisplayBonuses();
+           // _displayBonuses = new DisplayBonuses()убрал
             _flag = false;
         }
         
@@ -27,8 +29,8 @@ namespace OOP
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                var player = other.gameObject.GetComponent<PlayerMovements>();
-                player.speed = 15.0f;
+                var player = other.gameObject.GetComponent<PlayerBase>(); //была ссылка на скрипт Player Moovment
+                player.Speed = 15.0f;
                 print("Увеличение скорости 10");
                 PlayerBall.flage = true;                       
                 Interaction();
@@ -36,16 +38,6 @@ namespace OOP
             }
         }
 
-
-        void Update()
-        {
-            //if (_flag == true)//не принимает новое значение true из метода OnTriggerEnter
-            //{
-            //    StartCoroutine(SpeedChange());
-                
-            //}
-
-        }
 
         private IEnumerator SpeedChange()
         {   
@@ -58,8 +50,9 @@ namespace OOP
 
         protected override void Interaction()
         {
-           // Add bonus
-           PlayerBall.bonus+=5;
+            // Add bonus
+            ContactPlayerGoodBonus.Invoke(PointgoodBonus);//вызвали событие
+           
            Destroy(gameObject);
             
         }

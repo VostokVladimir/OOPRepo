@@ -9,18 +9,21 @@ namespace OOP
 {
     public sealed class BadBonus : InteractiveObjects, IRotation, IFlay, IDamagable
     {
+        private int damage=5;
         private float _lengthFlay;
         private float _speedRotation;
-        public delegate void BadBonusDelegate();
+        public delegate void BadBonusDel(string s, Color c,int damaging);
+        public event BadBonusDel ContactBadBonusPlayer;
+        
         private float _maxhealth = 4;
         private float _currentHealth;
         public bool _isContact;
-        public event BadBonusDelegate Event;
-        //public event Action<string, Color> CatchPlayer;
+        
+       
 
 
-        public delegate void BadBonusDel(string s, Color c);
-        public event BadBonusDel CatchPlayer = delegate (string str, Color col) { };
+        
+        
 
         private void Awake()
         {
@@ -35,7 +38,7 @@ namespace OOP
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                var player = other.gameObject.GetComponent<PlayerMovements>();
+                var player = other.gameObject.GetComponent<Transform>();//было раньше взять элемент Player Moovment
                 var _skriptPlayerBall = other.gameObject.GetComponent<PlayerBall>();
                 player.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
                 Debug.Log("Уменьшение");
@@ -51,8 +54,7 @@ namespace OOP
         
         public override void Interaction()
         {
-            CatchPlayer.Invoke(gameObject.name, _color);
-
+            ContactBadBonusPlayer.Invoke(gameObject.name, _color,damage);
             Destroy(gameObject);
 
 
@@ -62,6 +64,8 @@ namespace OOP
                 try
                 {
                     PlayerBall.bonus -= 5;
+                    
+
                 }
                 catch (System.Exception ex)
                 {

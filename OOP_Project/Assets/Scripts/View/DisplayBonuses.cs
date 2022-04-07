@@ -8,9 +8,11 @@ namespace OOP
     
     public class DisplayBonuses
     {   private Text _text;
-        public DisplayBonuses()//конструктор для доступа к свойству
+        public DisplayBonuses(GameObject b)//конструктор для доступа к свойству
         {
-            _text = Object.FindObjectOfType<Text>();
+            _text = b.GetComponentInChildren<Text>();//что тут происходит ?
+            _text.text = string.Empty;
+
         }
 
         public void Display (int info)
